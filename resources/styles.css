@@ -1,0 +1,103 @@
+#bg {
+  viewport-fill: black;
+}
+
+
+#tempLabel{
+  font-size: 35;
+  font-family: Fabrikat-Bold;
+  text-length: 32;
+  text-anchor: start;
+  x: $+1%;
+  y: 55%;
+  fill: #8080FF;
+  
+}
+
+
+#sunriseLabel{
+  font-size: 35;
+  font-family: Fabrikat-Bold;
+  text-length: 32;
+  text-anchor: start;
+  fill: #14D3F5;
+  x: 32%;
+  y: 18%;
+}
+
+#sunsetLabel{
+  font-size: 35;
+  font-family: Fabrikat-Bold;
+  text-length: 32;
+  text-anchor: start;
+  fill: #14D3F5;
+  x: 32%;
+  y: 35%;
+
+}
+
+
+#upperLabel {
+  font-size: 140;
+  font-family: Fabrikat-Black;
+  text-length: 32;
+  text-anchor: end;
+  x: 99%;
+  y: 45%;
+  fill: white; 
+}
+
+#lowerLabel{
+  font-size: 140;
+  font-family: Fabrikat-Black;
+  text-length: 32;
+  text-anchor: end;
+  x: 99%;
+  y: 95%;
+  fill: white;
+}
+
+#hrm {
+  font-size: 70;
+  font-family: Fabrikat-Bold;
+  text-length: 32;
+  text-anchor: start;
+  x: 1%;
+  y: 30%;
+  fill: 	#F80070;
+}
+
+#activeMinutesLabel {
+  font-size: 35;
+  font-family: Fabrikat-Bold;
+  text-length: 32;
+  text-anchor: start;
+  x: 1%;
+  y: 55%;
+  fill: #14D3F5;
+}
+
+#stepsLabel {
+  font-size: 35;
+  font-family: Fabrikat-Bold;
+  text-length: 32;
+  text-anchor: start;
+  x: 1%;
+  y: 75%;
+  fill: #14D3F5;
+}
+
+
+
+#dateLabel {
+  font-size: 37;
+  font-family: Fabrikat-Bold;
+  text-length: 32;
+  text-anchor: start;
+  x: 1%;
+  y: 95%;
+  fill: #5F9EA0;
+}
+
+
+

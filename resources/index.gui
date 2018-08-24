@@ -1,0 +1,25 @@
+<svg class="bg">
+   <svg>
+  <rect  id="background" x="0"   y="0" width="100%" height="100%" fill="black" pointer-events="visible"/>
+   </svg>
+  <text id="upperLabel" ></text>
+  <text id="lowerLabel" ></text>      
+  <text id="dateLabel"></text>
+  <text id="stepsLabel"></text> 
+  <text id="distanceLabel"></text>
+  <text id="baroLabel"></text>
+ 
+
+  
+  <text id="activeMinutesLabel">
+  
+   <text id="tempLabel"/>
+  
+  </text>
+
+     
+    <text id = "hrm" pointer-events="visible" >       
+    <text id="sunriseLabel"/>
+    <text id="sunsetLabel"/>     
+    </text>
+</svg>
