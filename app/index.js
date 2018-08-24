@@ -350,7 +350,8 @@ function weatherCheck(){
     settings.tempText = tempText;
   }
   
-  
+ 
+
 }else{
  
     if(fahrenheit){
@@ -365,14 +366,11 @@ function weatherCheck(){
         tempsunsetHours = g_sunsetHours -12;
         lowElement.text =util.zeroPad(tempsunsetHours)+":"+util.zeroPad(g_sunsetMinutes);
        
-    }else{
-      
-        
+    }else{  
        lowElement.text =util.zeroPad(g_sunsetHours)+":"+util.zeroPad(g_sunsetMinutes);
     }
       
       highElement.text = util.zeroPad(g_sunriseHours)+":"+util.zeroPad(g_sunriseMinutes);     
-  
   
         settings.g_sunriseHours = g_sunriseHours;
         settings.g_sunriseMinutes = g_sunriseMinutes;
@@ -384,17 +382,8 @@ function weatherCheck(){
         settings.toggle = toggle;
         settings.fahrenheit = fahrenheit;
         settings.extremes = extremes;
-
 }
-
-
-
 }
-
-
-
-
-
 
 //settings
 messaging.peerSocket.onmessage = function(evt) {
@@ -434,77 +423,57 @@ messaging.peerSocket.onmessage = function(evt) {
   
   if(evt.data.key == "sunriseColor"){     
       highElement.style.fill = evt.data.value;
-    
+   
   }
+
    if(evt.data.key == "baroColor"){     
-      baroElement.style.fill = evt.data.value;
-    
+      baroElement.style.fill = evt.data.value;   
   }
+
    if(evt.data.key == "entfernungColor"){     
-      distanceElement.style.fill = evt.data.value;
-    
+      distanceElement.style.fill = evt.data.value;    
   }
+
    if(evt.data.key == "backgroundColor"){     
-      backgroundElement.style.fill = evt.data.value;
-    
+      backgroundElement.style.fill = evt.data.value;  
   }
+
   if(evt.data.key == "sunsetColor"){
-     lowElement.style.fill = evt.data.value;
-    
+     lowElement.style.fill = evt.data.value;    
   }
+
   if(evt.data.key == "dateColor"){
     dateLabel.style.fill = evt.data.value;  
-    
-
   }
   
   if(evt.data.key == "hoursColor"){
     upperTime.style.fill = evt.data.value;
-   
-   
   }
   
   if(evt.data.key == "minutesColor"){
-    lowerTime.style.fill = evt.data.value;
-    
-  
+    lowerTime.style.fill = evt.data.value; 
   }
   
   if(evt.data.key =="weatherColor"){
     tempLabel.style.fill = evt.data.value;
-    
-   
   }
   
   if(evt.data.key =="heartrateColor"){
     hrLabel.style.fill = evt.data.value;
-   
-   
   }
   
    if(evt.data.key =="activityLineColor"){
     activeMinutesLabel.style.fill = evt.data.value;
-
-     
   }
   
    if(evt.data.key =="distanceColor"){
-    stepsLabel.style.fill = evt.data.value;
- 
-   
+    stepsLabel.style.fill = evt.data.value;  
   }
-  
-  
-  
-  
+
   else{}
 
   saveIt(evt);
-
-  
 }  
-
-
  
 function saveIt(element) {
 
