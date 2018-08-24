@@ -5,6 +5,18 @@ function Colors(props) {
   
   return (
     <Page>
+
+
+      <Select
+  label= "Seperator"
+  settingsKey="seperator"
+  options={[
+    {name:"|", value: 0}, 
+    {name:"/", value: 1},
+    {name:"space", value: 2},
+    {name:"\\", value: 3},
+  ]}
+/>
    
      <Toggle
           settingsKey="toggle"

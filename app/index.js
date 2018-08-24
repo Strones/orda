@@ -23,6 +23,7 @@ var bar = new Barometer({ frequency: 1 });
 let lang = locale.language;
 let settings = {};
 
+
 if (!device.screen) device.screen = { width: 348, height: 250 };
 
 
@@ -46,6 +47,8 @@ let g_sunsetHours = "--";
 let g_sunsetMinutes = "--";
 let g_tempLow = "-";
 let g_tempHigh = "-";
+
+
 
 
 
@@ -88,6 +91,7 @@ try {
   settings.toggle = 0;
   settings.baro = '#14D3F5';
   settings.dist = '#14D3F5';
+  settings.seperator = "/";
   
   fs.writeFileSync("settings.txt", settings, "cbor");
 
@@ -117,6 +121,7 @@ let settingsread = fs.readFileSync("settings.txt", "cbor");
   settings.toggle = settingsread.toggle;
   settings.baro = settingsread.baro;
   settings.dist = settingsread.dist;
+  settings.seperator = settingsread.seperator;
 
   g_sunriseHours = settingsread.g_sunriseHours;
   g_sunriseMinutes = settingsread.g_sunriseMinutes;
@@ -124,6 +129,8 @@ let settingsread = fs.readFileSync("settings.txt", "cbor");
   g_sunsetMinutes= settingsread.g_sunsetMinutes;
   g_tempLow = settingsread.g_tempLow;
   g_tempHigh = settingsread.g_tempHigh;
+
+
 
 
 //Colors
@@ -146,6 +153,7 @@ let distCol = settingsread.dist || '#14D3F5';
 let highElementData;
 let lowElementData;
 let tempText = settingsread.tempText;
+let seperator = settingsread.seperator;
 
 //data
 let extremes = settingsread.extremes || false;
@@ -252,7 +260,8 @@ weather.onerror = (error) => {
    if(miles){
      
    if (device.screen.width != 300){
-      stepsLabel.text = `${today.adjusted.steps}|${(today.adjusted.distance/1000*0.621371).toFixed(2)}`;
+  
+      stepsLabel.text = `${today.adjusted.steps}${seperator}${(today.adjsted.distance/1000*0.621371).toFixed(2)}`;
    }else{
       stepsLabel.text = today.adjusted.steps;
       distanceElement.text = (today.adjusted.distance/1000*0.621371).toFixed(2);
@@ -264,7 +273,7 @@ weather.onerror = (error) => {
   }
    else{
       if (device.screen.width != 300){
-      stepsLabel.text = `${today.adjusted.steps}|${(today.adjusted.distance/1000).toFixed(2)}`;
+      stepsLabel.text = `${today.adjusted.steps}${seperator}${(today.adjusted.distance/1000).toFixed(2)}`;
    }else{
      stepsLabel.text = today.adjusted.steps;
      distanceElement.text = (today.adjusted.distance/1000).toFixed(2);
@@ -275,9 +284,9 @@ weather.onerror = (error) => {
    }
   weatherCheck();
    if (device.screen.width == 300){
-       activeMinutesLabel.text=`${today.adjusted.activeMinutes}|${battery.chargeLevel}`;
+       activeMinutesLabel.text=`${today.adjusted.activeMinutes}${seperator}${battery.chargeLevel}`;
    }else{
-      activeMinutesLabel.text=`${today.adjusted.activeMinutes}|${battery.chargeLevel}|`;
+      activeMinutesLabel.text=`${today.adjusted.activeMinutes}${seperator}${battery.chargeLevel}`;
    }
  
   messaging.peerSocket.onopen = function() {
@@ -469,6 +478,25 @@ messaging.peerSocket.onmessage = function(evt) {
    if(evt.data.key =="distanceColor"){
     stepsLabel.style.fill = evt.data.value;  
   }
+  if(evt.data.key == "seperator"){
+    
+    switch(JSON.stringify(evt.data.value.values[0].value)){
+      case "0": seperator = "|"
+              break;
+      case "1": seperator = "/"
+              break;
+      case "2": seperator = " "
+              break;
+      case "3": seperator = "\\"
+              break;    
+              
+    console.log("Seperator:"+seperator);
+
+    } 
+    
+    console.log("SettingsValueSep:"+seperator);
+    
+  }
 
   else{}
 
@@ -559,7 +587,29 @@ function saveIt(element) {
   
   if(element.data.key == "distanceColor"){
     settings.steps = element.data.value;
-  }else{}
+  }
+  
+  if(element.data.key == "seperator"){
+    console.log("Saving:"+JSON.stringify(element.data.value.values[0].value)); 
+    switch(JSON.stringify(element.data.value.values[0].value)){
+      
+
+      case "0": settings.seperator = "|"
+              break;
+      case "1": settings.seperator = "/"
+              break;
+      case "2": settings.seperator = " "
+              break;
+      case "3": settings.seperator = "\\"
+              break;    
+          
+    
+
+    } 
+  }
+  
+  else{}
+  console.log("SEPERATOR:"+seperator);
 }
 
 function updateClock() {
@@ -589,11 +639,11 @@ function updateClock() {
   lowerTime.text = mins;
  
   if(americanFormat){
-    dateLabel.text = `${m}|${date}|${util.weekday[prefix][wday]}`;
+    dateLabel.text = `${m}${seperator}${date}${seperator}${util.weekday[prefix][wday]}`;
   
   }
 else{
-   dateLabel.text = `${date}|${m}|${util.weekday[prefix][wday]}`;
+   dateLabel.text = `${date}${seperator}${m}${seperator}${util.weekday[prefix][wday]}`;
 }
 
   if(charger.connected){
