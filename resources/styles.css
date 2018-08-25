@@ -8,7 +8,7 @@
   font-family: Fabrikat-Bold;
   text-length: 32;
   text-anchor: start;
-  x: $+1%;
+  x: 30%;
   y: 55%;
   fill: #8080FF;
   
@@ -41,8 +41,8 @@
   font-size: 140;
   font-family: Fabrikat-Black;
   text-length: 32;
-  text-anchor: end;
-  x: 99%;
+  text-anchor: middle;
+  x: 75%;
   y: 45%;
   fill: white; 
 }
@@ -51,8 +51,8 @@
   font-size: 140;
   font-family: Fabrikat-Black;
   text-length: 32;
-  text-anchor: end;
-  x: 99%;
+  text-anchor: middle;
+  x: 75%;
   y: 95%;
   fill: white;
 }

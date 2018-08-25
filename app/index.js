@@ -91,7 +91,8 @@ try {
   settings.toggle = 0;
   settings.baro = '#14D3F5';
   settings.dist = '#14D3F5';
-  settings.seperator = "/";
+  settings.seperator = "|";
+  settings.mirrored = false;
   
   fs.writeFileSync("settings.txt", settings, "cbor");
 
@@ -122,6 +123,7 @@ let settingsread = fs.readFileSync("settings.txt", "cbor");
   settings.baro = settingsread.baro;
   settings.dist = settingsread.dist;
   settings.seperator = settingsread.seperator;
+  settings.mirrored = settingsread.mirrored;
 
   g_sunriseHours = settingsread.g_sunriseHours;
   g_sunriseMinutes = settingsread.g_sunriseMinutes;
@@ -153,10 +155,12 @@ let distCol = settingsread.dist || '#14D3F5';
 let highElementData;
 let lowElementData;
 let tempText = settingsread.tempText;
-let seperator = settingsread.seperator;
+let seperator = settingsread.seperator || "|";
+
 
 //data
 let extremes = settingsread.extremes || false;
+let mirrored = settingsread.mirrored;
 let toggle = settingsread.toggle || 0;
 let fahrenheit = settingsread.fahrenheit;
 let miles = settingsread.miles;
@@ -173,7 +177,8 @@ if(extremes){
 let highTemp = settingsread.highElementData;
 let lowTemp = settingsread.lowElementData;
 let tempText = settingsread.tempText;
-
+let width =  device.screen.width;
+let height = device.screen.height;
 
 
 
@@ -224,7 +229,6 @@ let tempVar = true;
 let lang = locale.language;
 
 
-console.log(lang);
 
 
  // Display the weather data received from the companion
@@ -250,13 +254,204 @@ weather.onerror = (error) => {
   console.log("Weather error " + JSON.stringify(error));
 }
 
+function flip(){
+
+//mirror layout
+if(mirrored){
+ if(width == 300){
+
+
+hrLabel.textAnchor = "end";
+dateLabel.textAnchor = "end";
+stepsLabel.textAnchor = "end";
+distanceElement.textAnchor = "end";
+activeMinutesLabel.textAnchor = "end";
+highElement.textAnchor = "end";
+lowElement.textAnchor = "end";
+baroElement.textAnchor = "end";
+
+upperTime.x=0.25*width;
+upperTime.y=0.38*height;
+
+lowerTime.x = 0.25*width;
+lowerTime.y = 0.98*height;
+
+hrLabel.x= 0.99*width;
+hrLabel.y= 0.14*height;
+
+tempLabel.x= 0.24*width; 
+tempLabel.y= 0.56*height;
+
+dateLabel.x= 0.99*width;
+dateLabel.y= 0.56*height;
+
+stepsLabel.x = 0.99*width;
+stepsLabel.y = 0.72*height;  
+
+activeMinutesLabel.x= 0.99*width;
+activeMinutesLabel.y= 0.98*height;
+
+highElement.x= 0.99*width;
+highElement.y= 0.28*height;
+
+lowElement.x= 0.99*width;
+lowElement.y= 0.40*height;
+
+
+distanceElement.x= 0.99*width;
+distanceElement.y= 0.85*height;  
+
+baroElement.x= 0.78*width;
+baroElement.y= 0.14*height;
+ }
+
+ else{
+hrLabel.textAnchor = "end";
+dateLabel.textAnchor = "end";
+stepsLabel.textAnchor = "end";
+distanceElement.textAnchor = "end";
+activeMinutesLabel.textAnchor = "end";
+highElement.textAnchor = "end";
+lowElement.textAnchor = "end";
+baroElement.textAnchor = "end";
+tempLabel.textAnchor = "end";
+
+upperTime.x=0.25*width;
+upperTime.y=0.45*height;
+
+lowerTime.x = 0.25*width;
+lowerTime.y = 0.95*height;
+
+hrLabel.x= 0.99*width;
+hrLabel.y= 0.30*height;
+
+tempLabel.x= 0.7*width; 
+tempLabel.y= 0.55*height;
+
+
+dateLabel.x= 0.99*width;
+dateLabel.y= 0.95*height;
+
+stepsLabel.x = 0.99*width;
+stepsLabel.y = 0.75*height;  
+
+activeMinutesLabel.x= 0.99*width;
+activeMinutesLabel.y= 0.55*height;
+
+highElement.x= 0.68*width;
+highElement.y= 0.18*height;
+
+lowElement.x= 0.68*width;
+lowElement.y= 0.35*height;
+
+ }
+
+
+ console.log("Width:"+width+" Height:"+height); 
+}
+else{
+//NOT mirrored
+  if(width == 300){
+
+
+    hrLabel.textAnchor = "start";
+    dateLabel.textAnchor = "start";
+    stepsLabel.textAnchor = "start";
+    distanceElement.textAnchor = "start";
+    activeMinutesLabel.textAnchor = "start";
+    highElement.textAnchor = "start";
+    lowElement.textAnchor = "start";
+    baroElement.textAnchor = "start";
+    
+    upperTime.x=0.75*width;
+    upperTime.y=0.38*height;
+    
+    lowerTime.x = 0.75*width;
+    lowerTime.y = 0.98*height;
+    
+    hrLabel.x= 0.01*width;
+    hrLabel.y= 0.14*height;
+    
+    tempLabel.x= 0.76*width; 
+    tempLabel.y= 0.56*height;
+    
+    dateLabel.x= 0.01*width;
+    dateLabel.y= 0.56*height;
+    
+    stepsLabel.x = 0.01*width;
+    stepsLabel.y = 0.72*height;  
+    
+    activeMinutesLabel.x= 0.01*width;
+    activeMinutesLabel.y= 0.98*height;
+    
+    highElement.x= 0.01*width;
+    highElement.y= 0.28*height;
+    
+    lowElement.x= 0.01*width;
+    lowElement.y= 0.40*height;
+    
+    
+    distanceElement.x= 0.01*width;
+    distanceElement.y= 0.85*height;  
+    
+    baroElement.x= 0.22*width;
+    baroElement.y= 0.14*height;
+     }
+    
+     else{
+      
+    hrLabel.textAnchor = "start";
+    dateLabel.textAnchor = "start";
+    stepsLabel.textAnchor = "start";
+    distanceElement.textAnchor = "start";
+    activeMinutesLabel.textAnchor = "start";
+    highElement.textAnchor = "start";
+    lowElement.textAnchor = "start";
+    baroElement.textAnchor = "start";
+    tempLabel.textAnchor = "start";
+    
+    upperTime.x=0.75*width;
+    upperTime.y=0.45*height;
+    
+    lowerTime.x = 0.75*width;
+    lowerTime.y = 0.95*height;
+    
+    hrLabel.x= 0.01*width;
+    hrLabel.y= 0.30*height;
+    
+    tempLabel.x= 0.3*width; 
+    tempLabel.y= 0.55*height;
+    
+    
+    dateLabel.x= 0.01*width;
+    dateLabel.y= 0.95*height;
+    
+    stepsLabel.x = 0.01*width;
+    stepsLabel.y = 0.75*height;  
+    
+    activeMinutesLabel.x= 0.01*width;
+    activeMinutesLabel.y= 0.55*height;
+    
+    highElement.x= 0.32*width;
+    highElement.y= 0.18*height;
+    
+    lowElement.x= 0.32*width;
+    lowElement.y= 0.35*height;
+    
+     }
+
+
+}
+}
+
+
+
 
 
 //happens onChange of screen  
   
  function updateStats(){ 
-     
-   
+   flip();
    if(miles){
      
    if (device.screen.width != 300){
@@ -396,9 +591,16 @@ function weatherCheck(){
 
 //settings
 messaging.peerSocket.onmessage = function(evt) {
- console.log(evt.data.key);
   
-    if(evt.data.key == "toggle"){     
+  console.log("DataValue:"+evt.data.value);
+  console.log("DataKey:"+evt.data.key);
+  
+  if(evt.data.key == "mirror"){
+    mirrored = evt.data.value;
+
+ }
+    if(evt.data.key == "toggle"){  
+      console.log("insideToggle");   
          if(evt.data.value){
         toggle = true;
      }else{
@@ -406,7 +608,8 @@ messaging.peerSocket.onmessage = function(evt) {
      }    
   }
   
-      if(evt.data.key == "americanFormat"){     
+      if(evt.data.key == "americanFormat"){   
+        console.log("insideAmericanFormat");   
          if(evt.data.value){
         americanFormat = true;
      }else{
@@ -489,20 +692,23 @@ messaging.peerSocket.onmessage = function(evt) {
               break;
       case "3": seperator = "\\"
               break;    
-              
-    console.log("Seperator:"+seperator);
 
     } 
+
+   
     
-    console.log("SettingsValueSep:"+seperator);
+   
     
   }
 
   else{}
-
+  
   saveIt(evt);
 }  
- 
+
+
+
+
 function saveIt(element) {
 
   
@@ -517,6 +723,14 @@ function saveIt(element) {
         settings.fahrenheit = false;
      }
    }
+
+   if(element.data.key == "mirror"){
+    if(element.data.value){
+       settings.mirrored = true;
+    }else{
+       settings.mirrored = false;
+    }
+  }
   
    if(element.data.key == "americanFormat"){
      if(element.data.value){
@@ -609,7 +823,7 @@ function saveIt(element) {
   }
   
   else{}
-  console.log("SEPERATOR:"+seperator);
+
 }
 
 function updateClock() {
@@ -622,7 +836,7 @@ function updateClock() {
   let m = today.getMonth() +1;
   let timeLeft =  battery.timeUntilFull || "--";
   let prefix = lang.substring(0,2);
-
+  console.log("Mirror:"+mirrored);
   
   if(timeLeft == 'infinity' ){
     timeLeft = "oo";
@@ -651,6 +865,8 @@ else{
    }
    
 }
+
+   
 
   //start the hrmonitoring
 hrm.onreading = function() {

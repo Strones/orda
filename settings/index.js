@@ -17,7 +17,12 @@ function Colors(props) {
     {name:"\\", value: 3},
   ]}
 />
-   
+      <Toggle
+            settingsKey="mirror"
+            label="Flip Layout"
+          />  
+
+
      <Toggle
           settingsKey="toggle"
           label="12h"
