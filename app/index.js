@@ -45,8 +45,8 @@ let g_sunriseHours = "--";
 let g_sunriseMinutes = "--";
 let g_sunsetHours = "--";
 let g_sunsetMinutes = "--";
-let g_tempLow = "-";
-let g_tempHigh = "-";
+let g_tempLow = "--";
+let g_tempHigh = "--";
 
 
 
@@ -125,12 +125,12 @@ let settingsread = fs.readFileSync("settings.txt", "cbor");
   settings.seperator = settingsread.seperator;
   settings.mirrored = settingsread.mirrored;
 
-  g_sunriseHours = settingsread.g_sunriseHours;
-  g_sunriseMinutes = settingsread.g_sunriseMinutes;
-  g_sunsetHours = settingsread.g_sunsetHours;
-  g_sunsetMinutes= settingsread.g_sunsetMinutes;
-  g_tempLow = settingsread.g_tempLow;
-  g_tempHigh = settingsread.g_tempHigh;
+  g_sunriseHours = settingsread.g_sunriseHours || "--";
+  g_sunriseMinutes = settingsread.g_sunriseMinutes || "--"; 
+  g_sunsetHours = settingsread.g_sunsetHours || "--";
+  g_sunsetMinutes= settingsread.g_sunsetMinutes || "--";
+  g_tempLow = settingsread.g_tempLow || "--";
+  g_tempHigh = settingsread.g_tempHigh || "--";
 
 
 
@@ -166,6 +166,8 @@ let fahrenheit = settingsread.fahrenheit;
 let miles = settingsread.miles;
 let americanFormat = settingsread.americanFormat;
 
+
+
 if(extremes){
   highElementData = settingsread.g_sunriseHours +":"+settingsread.g_sunriseMinutes;
   lowElementData = settingsread.g_sunsetHours +":"+settingsread.g_sunsetMinutes;
@@ -174,8 +176,8 @@ if(extremes){
   lowElementData = settingsread.g_tempLow;
   
 }
-let highTemp = settingsread.highElementData;
-let lowTemp = settingsread.lowElementData;
+let highTemp = settingsread.highElementData || "--";
+let lowTemp = settingsread.lowElementData || "--";
 let tempText = settingsread.tempText;
 let width =  device.screen.width;
 let height = device.screen.height;
@@ -203,9 +205,9 @@ if (device.screen.width == 300){
 
 
 //initialize with something
-highElement.text = g_tempHigh;
-lowElement.text = g_tempLow;
-tempLabel.text = tempText;
+highElement.text = g_tempHigh || "--";
+lowElement.text = g_tempLow || "--";
+tempLabel.text = tempText || "--";
 hrLabel.text = "--"; 
 if (device.screen.width == 300) {
   baroElement.text = "--";
@@ -237,16 +239,16 @@ weather.onsuccess = (data) => {
   let sunsetData = new Date(data.sunset);
 
      
-        g_sunriseHours= sunriseData.getHours();
-        g_sunriseMinutes = sunriseData.getMinutes();
+        g_sunriseHours= sunriseData.getHours() || "--";
+        g_sunriseMinutes = sunriseData.getMinutes()|| "--";
   
-        g_sunsetHours = sunsetData.getHours();
-        g_sunsetMinutes = sunsetData.getMinutes();
+        g_sunsetHours = sunsetData.getHours() || "--";
+        g_sunsetMinutes = sunsetData.getMinutes() || "--";
         
-        g_tempLow = data.tempLow.toFixed(0);
-        g_tempHigh = data.tempHigh.toFixed(0);
+        g_tempLow = data.tempLow.toFixed(0) || "--";
+        g_tempHigh = data.tempHigh.toFixed(0) || "--";
   
-        tempText = data.temperatureC.toFixed(0);
+        tempText = data.temperatureC.toFixed(0) || "--";
 
 } 
 
