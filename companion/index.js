@@ -3,21 +3,13 @@ import Weather from '../common/weather/phone';
 import { settingsStorage } from "settings";
 import * as messaging from "messaging";
 import { me } from "companion";
-import { device } from "peer";
-
-
-
-
-
 
 // Create the weather object
 // this is always needed to answer the device's requests
 let weather = new Weather();
 let KEY_COLOR = "myColor";
 
-if (!device.screen) device.screen = { width: 348, height: 250 };
-settingsStorage.setItem("screenWidth", device.screen.width);
-settingsStorage.setItem("screenHeight", device.screen.height);
+
 
 // Settings have been changed
 settingsStorage.onchange = function(evt) {

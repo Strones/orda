@@ -20,13 +20,10 @@
       "en": {
         "name": "Orda"
       }
-    }
+    },
+    "defaultLanguage": "en-US"
   },
   "devDependencies": {
-    "@fitbit/sdk": "~1.0.0",
-    "@fitbit/sdk-cli": "^1.0.0"
-  },
-  "scripts": {
-    "build": "fitbit-build"
+    "@fitbit/sdk": "~4.1.0"
   }
 }

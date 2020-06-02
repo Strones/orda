@@ -15,15 +15,13 @@ import { Barometer } from "barometer";
 import { me as device } from "device";
 
 // Update the clock every unit
-clock.granularity = "minutes";
+clock.granularity = "seconds";
 
-let weather = new Weather();
 var hrm = new HeartRateSensor();
 var bar = new Barometer({ frequency: 1 });
 let lang = locale.language;
 let settings = {};
-
-
+let weather = new Weather();
 if (!device.screen) device.screen = { width: 348, height: 250 };
 
 
@@ -45,10 +43,8 @@ let g_sunriseHours = "--";
 let g_sunriseMinutes = "--";
 let g_sunsetHours = "--";
 let g_sunsetMinutes = "--";
-let g_tempLow = "--";
-let g_tempHigh = "--";
-
-
+let g_tempLow = "-";
+let g_tempHigh = "-";
 
 
 
@@ -91,8 +87,6 @@ try {
   settings.toggle = 0;
   settings.baro = '#14D3F5';
   settings.dist = '#14D3F5';
-  settings.seperator = "|";
-  settings.mirrored = false;
   
   fs.writeFileSync("settings.txt", settings, "cbor");
 
@@ -122,17 +116,13 @@ let settingsread = fs.readFileSync("settings.txt", "cbor");
   settings.toggle = settingsread.toggle;
   settings.baro = settingsread.baro;
   settings.dist = settingsread.dist;
-  settings.seperator = settingsread.seperator;
-  settings.mirrored = settingsread.mirrored;
 
-  g_sunriseHours = settingsread.g_sunriseHours || "--";
-  g_sunriseMinutes = settingsread.g_sunriseMinutes || "--"; 
-  g_sunsetHours = settingsread.g_sunsetHours || "--";
-  g_sunsetMinutes= settingsread.g_sunsetMinutes || "--";
-  g_tempLow = settingsread.g_tempLow || "--";
-  g_tempHigh = settingsread.g_tempHigh || "--";
-
-
+  g_sunriseHours = settingsread.g_sunriseHours;
+  g_sunriseMinutes = settingsread.g_sunriseMinutes;
+  g_sunsetHours = settingsread.g_sunsetHours;
+  g_sunsetMinutes= settingsread.g_sunsetMinutes;
+  g_tempLow = settingsread.g_tempLow;
+  g_tempHigh = settingsread.g_tempHigh;
 
 
 //Colors
@@ -155,18 +145,13 @@ let distCol = settingsread.dist || '#14D3F5';
 let highElementData;
 let lowElementData;
 let tempText = settingsread.tempText;
-let seperator = settingsread.seperator || "|";
-
 
 //data
 let extremes = settingsread.extremes || false;
-let mirrored = settingsread.mirrored;
 let toggle = settingsread.toggle || 0;
 let fahrenheit = settingsread.fahrenheit;
 let miles = settingsread.miles;
 let americanFormat = settingsread.americanFormat;
-
-
 
 if(extremes){
   highElementData = settingsread.g_sunriseHours +":"+settingsread.g_sunriseMinutes;
@@ -176,11 +161,10 @@ if(extremes){
   lowElementData = settingsread.g_tempLow;
   
 }
-let highTemp = settingsread.highElementData || "--";
-let lowTemp = settingsread.lowElementData || "--";
+let highTemp = settingsread.highElementData;
+let lowTemp = settingsread.lowElementData;
 let tempText = settingsread.tempText;
-let width =  device.screen.width;
-let height = device.screen.height;
+
 
 
 
@@ -205,9 +189,9 @@ if (device.screen.width == 300){
 
 
 //initialize with something
-highElement.text = g_tempHigh || "--";
-lowElement.text = g_tempLow || "--";
-tempLabel.text = tempText || "--";
+highElement.text = g_tempHigh;
+lowElement.text = g_tempLow;
+tempLabel.text = tempText;
 hrLabel.text = "--"; 
 if (device.screen.width == 300) {
   baroElement.text = "--";
@@ -220,16 +204,10 @@ stepsLabel.text = "--";
 
 //distanceLabel.text = "--";
 activeMinutesLabel.text = "--";
-// Set the provider : yahoo / owm / wunderground / darksky
-weather.setProvider("yahoo"); 
-// set your api key
-weather.setApiKey("mykey");
-// set the maximum age of the data
-weather.setMaximumAge(50 * 1000); 
+
 
 let tempVar = true;
 let lang = locale.language;
-
 
 
 
@@ -239,16 +217,16 @@ weather.onsuccess = (data) => {
   let sunsetData = new Date(data.sunset);
 
      
-        g_sunriseHours= sunriseData.getHours() || "--";
-        g_sunriseMinutes = sunriseData.getMinutes()|| "--";
+        g_sunriseHours= sunriseData.getHours();
+        g_sunriseMinutes = sunriseData.getMinutes();
   
-        g_sunsetHours = sunsetData.getHours() || "--";
-        g_sunsetMinutes = sunsetData.getMinutes() || "--";
+        g_sunsetHours = sunsetData.getHours();
+        g_sunsetMinutes = sunsetData.getMinutes();
         
-        g_tempLow = data.tempLow.toFixed(0) || "--";
-        g_tempHigh = data.tempHigh.toFixed(0) || "--";
+        g_tempLow = data.tempLow.toFixed(0);
+        g_tempHigh = data.tempHigh.toFixed(0);
   
-        tempText = data.temperatureC.toFixed(0) || "--";
+        tempText = data.temperatureC.toFixed(0);
 
 } 
 
@@ -256,209 +234,17 @@ weather.onerror = (error) => {
   console.log("Weather error " + JSON.stringify(error));
 }
 
-function flip(){
-
-//mirror layout
-if(mirrored){
- if(width == 300){
-
-
-hrLabel.textAnchor = "end";
-dateLabel.textAnchor = "end";
-stepsLabel.textAnchor = "end";
-distanceElement.textAnchor = "end";
-activeMinutesLabel.textAnchor = "end";
-highElement.textAnchor = "end";
-lowElement.textAnchor = "end";
-baroElement.textAnchor = "end";
-
-upperTime.x=0.25*width;
-upperTime.y=0.38*height;
-
-lowerTime.x = 0.25*width;
-lowerTime.y = 0.98*height;
-
-hrLabel.x= 0.99*width;
-hrLabel.y= 0.14*height;
-
-tempLabel.x= 0.24*width; 
-tempLabel.y= 0.56*height;
-
-dateLabel.x= 0.99*width;
-dateLabel.y= 0.56*height;
-
-stepsLabel.x = 0.99*width;
-stepsLabel.y = 0.72*height;  
-
-activeMinutesLabel.x= 0.99*width;
-activeMinutesLabel.y= 0.98*height;
-
-highElement.x= 0.99*width;
-highElement.y= 0.28*height;
-
-lowElement.x= 0.99*width;
-lowElement.y= 0.40*height;
-
-
-distanceElement.x= 0.99*width;
-distanceElement.y= 0.85*height;  
-
-baroElement.x= 0.78*width;
-baroElement.y= 0.14*height;
- }
-
- else{
-hrLabel.textAnchor = "end";
-dateLabel.textAnchor = "end";
-stepsLabel.textAnchor = "end";
-distanceElement.textAnchor = "end";
-activeMinutesLabel.textAnchor = "end";
-highElement.textAnchor = "end";
-lowElement.textAnchor = "end";
-baroElement.textAnchor = "end";
-tempLabel.textAnchor = "end";
-
-upperTime.x=0.25*width;
-upperTime.y=0.45*height;
-
-lowerTime.x = 0.25*width;
-lowerTime.y = 0.95*height;
-
-hrLabel.x= 0.99*width;
-hrLabel.y= 0.30*height;
-
-tempLabel.x= 0.7*width; 
-tempLabel.y= 0.55*height;
-
-
-dateLabel.x= 0.99*width;
-dateLabel.y= 0.95*height;
-
-stepsLabel.x = 0.99*width;
-stepsLabel.y = 0.75*height;  
-
-activeMinutesLabel.x= 0.99*width;
-activeMinutesLabel.y= 0.55*height;
-
-highElement.x= 0.68*width;
-highElement.y= 0.18*height;
-
-lowElement.x= 0.68*width;
-lowElement.y= 0.35*height;
-
- }
-
-
- console.log("Width:"+width+" Height:"+height); 
-}
-else{
-//NOT mirrored
-  if(width == 300){
-
-
-    hrLabel.textAnchor = "start";
-    dateLabel.textAnchor = "start";
-    stepsLabel.textAnchor = "start";
-    distanceElement.textAnchor = "start";
-    activeMinutesLabel.textAnchor = "start";
-    highElement.textAnchor = "start";
-    lowElement.textAnchor = "start";
-    baroElement.textAnchor = "start";
-    
-    upperTime.x=0.75*width;
-    upperTime.y=0.38*height;
-    
-    lowerTime.x = 0.75*width;
-    lowerTime.y = 0.98*height;
-    
-    hrLabel.x= 0.01*width;
-    hrLabel.y= 0.14*height;
-    
-    tempLabel.x= 0.76*width; 
-    tempLabel.y= 0.56*height;
-    
-    dateLabel.x= 0.01*width;
-    dateLabel.y= 0.56*height;
-    
-    stepsLabel.x = 0.01*width;
-    stepsLabel.y = 0.72*height;  
-    
-    activeMinutesLabel.x= 0.01*width;
-    activeMinutesLabel.y= 0.98*height;
-    
-    highElement.x= 0.01*width;
-    highElement.y= 0.28*height;
-    
-    lowElement.x= 0.01*width;
-    lowElement.y= 0.40*height;
-    
-    
-    distanceElement.x= 0.01*width;
-    distanceElement.y= 0.85*height;  
-    
-    baroElement.x= 0.22*width;
-    baroElement.y= 0.14*height;
-     }
-    
-     else{
-      
-    hrLabel.textAnchor = "start";
-    dateLabel.textAnchor = "start";
-    stepsLabel.textAnchor = "start";
-    distanceElement.textAnchor = "start";
-    activeMinutesLabel.textAnchor = "start";
-    highElement.textAnchor = "start";
-    lowElement.textAnchor = "start";
-    baroElement.textAnchor = "start";
-    tempLabel.textAnchor = "start";
-    
-    upperTime.x=0.75*width;
-    upperTime.y=0.45*height;
-    
-    lowerTime.x = 0.75*width;
-    lowerTime.y = 0.95*height;
-    
-    hrLabel.x= 0.01*width;
-    hrLabel.y= 0.30*height;
-    
-    tempLabel.x= 0.3*width; 
-    tempLabel.y= 0.55*height;
-    
-    
-    dateLabel.x= 0.01*width;
-    dateLabel.y= 0.95*height;
-    
-    stepsLabel.x = 0.01*width;
-    stepsLabel.y = 0.75*height;  
-    
-    activeMinutesLabel.x= 0.01*width;
-    activeMinutesLabel.y= 0.55*height;
-    
-    highElement.x= 0.32*width;
-    highElement.y= 0.18*height;
-    
-    lowElement.x= 0.32*width;
-    lowElement.y= 0.35*height;
-    
-     }
-
-
-}
-}
-
-
-
 
 
 //happens onChange of screen  
   
  function updateStats(){ 
-   flip();
+     
+   
    if(miles){
      
    if (device.screen.width != 300){
-  
-      stepsLabel.text = `${today.adjusted.steps}${seperator}${(today.adjsted.distance/1000*0.621371).toFixed(2)}`;
+      stepsLabel.text = `${today.adjusted.steps}|${(today.adjusted.distance/1000*0.621371).toFixed(2)}`;
    }else{
       stepsLabel.text = today.adjusted.steps;
       distanceElement.text = (today.adjusted.distance/1000*0.621371).toFixed(2);
@@ -470,7 +256,7 @@ else{
   }
    else{
       if (device.screen.width != 300){
-      stepsLabel.text = `${today.adjusted.steps}${seperator}${(today.adjusted.distance/1000).toFixed(2)}`;
+      stepsLabel.text = `${today.adjusted.steps}|${(today.adjusted.distance/1000).toFixed(2)}`;
    }else{
      stepsLabel.text = today.adjusted.steps;
      distanceElement.text = (today.adjusted.distance/1000).toFixed(2);
@@ -481,14 +267,14 @@ else{
    }
   weatherCheck();
    if (device.screen.width == 300){
-       activeMinutesLabel.text=`${today.adjusted.activeMinutes}${seperator}${battery.chargeLevel}`;
+       activeMinutesLabel.text=`${today.adjusted.activeMinutes}|${battery.chargeLevel}`;
    }else{
-      activeMinutesLabel.text=`${today.adjusted.activeMinutes}${seperator}${battery.chargeLevel}`;
+      activeMinutesLabel.text=`${today.adjusted.activeMinutes}|${battery.chargeLevel}|`;
    }
  
-  messaging.peerSocket.onopen = function() {
-  // Fetch the weather every 15 sec
-  setInterval(() => weather.fetch(), 30 * 1000);
+ messaging.peerSocket.onopen = function() {
+  // Fetch the weather every 3 hours
+  setInterval(() => weather.fetch(),3 * 60 * 60 * 1000);
   weather.fetch();
 }
  
@@ -556,8 +342,7 @@ function weatherCheck(){
     settings.tempText = tempText;
   }
   
- 
-
+  
 }else{
  
     if(fahrenheit){
@@ -572,11 +357,14 @@ function weatherCheck(){
         tempsunsetHours = g_sunsetHours -12;
         lowElement.text =util.zeroPad(tempsunsetHours)+":"+util.zeroPad(g_sunsetMinutes);
        
-    }else{  
+    }else{
+      
+        
        lowElement.text =util.zeroPad(g_sunsetHours)+":"+util.zeroPad(g_sunsetMinutes);
     }
       
       highElement.text = util.zeroPad(g_sunriseHours)+":"+util.zeroPad(g_sunriseMinutes);     
+  
   
         settings.g_sunriseHours = g_sunriseHours;
         settings.g_sunriseMinutes = g_sunriseMinutes;
@@ -588,21 +376,23 @@ function weatherCheck(){
         settings.toggle = toggle;
         settings.fahrenheit = fahrenheit;
         settings.extremes = extremes;
+
 }
+
+
+
 }
+
+
+
+
+
 
 //settings
 messaging.peerSocket.onmessage = function(evt) {
+ 
   
-  console.log("DataValue:"+evt.data.value);
-  console.log("DataKey:"+evt.data.key);
-  
-  if(evt.data.key == "mirror"){
-    mirrored = evt.data.value;
-
- }
-    if(evt.data.key == "toggle"){  
-      console.log("insideToggle");   
+    if(evt.data.key == "toggle"){     
          if(evt.data.value){
         toggle = true;
      }else{
@@ -610,8 +400,7 @@ messaging.peerSocket.onmessage = function(evt) {
      }    
   }
   
-      if(evt.data.key == "americanFormat"){   
-        console.log("insideAmericanFormat");   
+      if(evt.data.key == "americanFormat"){     
          if(evt.data.value){
         americanFormat = true;
      }else{
@@ -637,80 +426,78 @@ messaging.peerSocket.onmessage = function(evt) {
   
   if(evt.data.key == "sunriseColor"){     
       highElement.style.fill = evt.data.value;
-   
+    
   }
-
    if(evt.data.key == "baroColor"){     
-      baroElement.style.fill = evt.data.value;   
+      baroElement.style.fill = evt.data.value;
+    
   }
-
    if(evt.data.key == "entfernungColor"){     
-      distanceElement.style.fill = evt.data.value;    
+      distanceElement.style.fill = evt.data.value;
+    
   }
-
    if(evt.data.key == "backgroundColor"){     
-      backgroundElement.style.fill = evt.data.value;  
+      backgroundElement.style.fill = evt.data.value;
+    
   }
-
   if(evt.data.key == "sunsetColor"){
-     lowElement.style.fill = evt.data.value;    
+     lowElement.style.fill = evt.data.value;
+    
   }
-
   if(evt.data.key == "dateColor"){
     dateLabel.style.fill = evt.data.value;  
+    
+
   }
   
   if(evt.data.key == "hoursColor"){
     upperTime.style.fill = evt.data.value;
+   
+   
   }
   
   if(evt.data.key == "minutesColor"){
-    lowerTime.style.fill = evt.data.value; 
+    lowerTime.style.fill = evt.data.value;
+    
+  
   }
   
   if(evt.data.key =="weatherColor"){
     tempLabel.style.fill = evt.data.value;
+    
+   
   }
   
   if(evt.data.key =="heartrateColor"){
     hrLabel.style.fill = evt.data.value;
+   
+   
   }
   
    if(evt.data.key =="activityLineColor"){
     activeMinutesLabel.style.fill = evt.data.value;
+
+     
   }
   
    if(evt.data.key =="distanceColor"){
-    stepsLabel.style.fill = evt.data.value;  
-  }
-  if(evt.data.key == "seperator"){
-    
-    switch(JSON.stringify(evt.data.value.values[0].value)){
-      case "0": seperator = "|"
-              break;
-      case "1": seperator = "/"
-              break;
-      case "2": seperator = " "
-              break;
-      case "3": seperator = "\\"
-              break;    
-
-    } 
-
+    stepsLabel.style.fill = evt.data.value;
+ 
    
-    
-   
-    
   }
-
-  else{}
   
+  
+  
+  
+  else{}
+
   saveIt(evt);
+
+  
 }  
 
 
-
-
+ 
 function saveIt(element) {
 
   
@@ -725,14 +512,6 @@ function saveIt(element) {
         settings.fahrenheit = false;
      }
    }
-
-   if(element.data.key == "mirror"){
-    if(element.data.value){
-       settings.mirrored = true;
-    }else{
-       settings.mirrored = false;
-    }
-  }
   
    if(element.data.key == "americanFormat"){
      if(element.data.value){
@@ -803,33 +582,11 @@ function saveIt(element) {
   
   if(element.data.key == "distanceColor"){
     settings.steps = element.data.value;
-  }
-  
-  if(element.data.key == "seperator"){
-    console.log("Saving:"+JSON.stringify(element.data.value.values[0].value)); 
-    switch(JSON.stringify(element.data.value.values[0].value)){
-      
-
-      case "0": settings.seperator = "|"
-              break;
-      case "1": settings.seperator = "/"
-              break;
-      case "2": settings.seperator = " "
-              break;
-      case "3": settings.seperator = "\\"
-              break;    
-          
-    
-
-    } 
-  }
-  
-  else{}
-
+  }else{}
 }
 
 function updateClock() {
-  
+  weatherCheck();
   let today = new Date(); 
   let hours = util.zeroPad(today.getHours());
   let mins = util.zeroPad(today.getMinutes());
@@ -838,7 +595,7 @@ function updateClock() {
   let m = today.getMonth() +1;
   let timeLeft =  battery.timeUntilFull || "--";
   let prefix = lang.substring(0,2);
-  console.log("Mirror:"+mirrored);
+
   
   if(timeLeft == 'infinity' ){
     timeLeft = "oo";
@@ -855,11 +612,11 @@ function updateClock() {
   lowerTime.text = mins;
  
   if(americanFormat){
-    dateLabel.text = `${m}${seperator}${date}${seperator}${util.weekday[prefix][wday]}`;
+    dateLabel.text = `${m}|${date}|${util.weekday[prefix][wday]}`;
   
   }
 else{
-   dateLabel.text = `${date}${seperator}${m}${seperator}${util.weekday[prefix][wday]}`;
+   dateLabel.text = `${date}|${m}|${util.weekday[prefix][wday]}`;
 }
 
   if(charger.connected){
@@ -867,8 +624,6 @@ else{
    }
    
 }
-
-   
 
   //start the hrmonitoring
 hrm.onreading = function() {
